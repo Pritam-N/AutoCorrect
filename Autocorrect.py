@@ -5,9 +5,9 @@ import pandas as pd
 from collections import OrderedDict
 from Levenshtein import *
 
-vocab_file = 'Vocab/vocab.txt'
+vocab_file = 'Vocab/tokens.txt'
 
-def process_vocab(vocab_file='Vocab/vocab.txt'):
+def process_vocab(vocab_file='Vocab/tokens.txt'):
     words = []
 
     with open(vocab_file, encoding="utf8") as f:
@@ -18,7 +18,7 @@ def process_vocab(vocab_file='Vocab/vocab.txt'):
     return words
 
 class AutoCorrect():
-    def __init__(self, vocab_file='Vocab/vocab.txt'):
+    def __init__(self, vocab_file='Vocab/tokens.txt'):
         self.vocab_file = vocab_file
         self.words = set(process_vocab(vocab_file))
 
@@ -107,13 +107,9 @@ class AutoCorrect():
         dict_updates, matching = self.running_predictions(word, updates)
 
         if not matching:
-        
-            while True:
-                updates = self.run_recursive(updates)
-                updates.remove(word)
-                dict_updates, matching = self.running_predictions(word, updates)
-                if matching:
-                    break
+            updates = self.run_recursive(updates)
+            updates.remove(word)
+            dict_updates, matching = self.running_predictions(word, updates)
 
         return dict_updates
 
